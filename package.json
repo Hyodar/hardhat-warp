@@ -9,7 +9,7 @@
     "script"
   ],
   "dependencies": {
-    "@nethermindeth/warp": "^2.4.4",
+    "@nethermindeth/warp": "^2.4.7",
     "@shardlabs/starknet-hardhat-plugin": "^0.6.6",
     "@typechain/hardhat": "^6.1.5",
     "@types/debug": "^4.1.7",

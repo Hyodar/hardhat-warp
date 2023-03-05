@@ -11,7 +11,9 @@ import { benchmark, getContractsToDeclare } from '../utils';
 import { getDevnetProvider } from '../provider';
 import { ethTopicToEvent } from '../eventRegistry';
 import { globalHRE } from '../hardhat/runtime-environment';
-import { callClassHashScript, warpEventCanonicalSignaturehash } from '@nethermindeth/warp';
+import { runStarkNetClassHash, warpEventCanonicalSignaturehash256 } from '@nethermindeth/warp';
+
+const uint128 = BigInt('0x100000000000000000000000000000000');
 
 export class ContractFactory {
   readonly interface: Interface;
@@ -32,11 +34,13 @@ export class ContractFactory {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     Object.entries(this.interface.events).forEach(([_, eventFragment]) => {
       const eventName = eventFragment.name;
-      const ethTopic = warpEventCanonicalSignaturehash(
+      const topic = warpEventCanonicalSignaturehash256(
         eventName,
         eventFragment.inputs.map((ef) => ef.type),
       );
-      ethTopicToEvent[ethTopic] = eventFragment;
+      const ethTopic = BigInt(topic.high) * uint128 + BigInt(topic.low);
+
+      ethTopicToEvent[`${ethTopic.toString(16).padStart(64, '0')}`] = eventFragment;
     });
   }
 
@@ -57,7 +61,7 @@ export class ContractFactory {
 
           const declareResponse = await this.starknetContractFactory.account.declare({
             contract: compiledContract,
-            classHash: callClassHashScript(compiledContractPath),
+            classHash: runStarkNetClassHash(compiledContractPath),
           });
 
           if (declareResponse.class_hash !== expected_hash) {

@@ -14,7 +14,7 @@ import { devnet } from '../devnet';
 import { HardhatRuntimeEnvironment } from 'hardhat/types';
 import { Artifacts } from './artifacts';
 import { Interface } from 'ethers/lib/utils';
-import { callClassHashScript } from '@nethermindeth/warp';
+import { runStarkNetClassHash } from '@nethermindeth/warp';
 
 export let globalHRE: HardhatRuntimeEnvironment;
 
@@ -59,7 +59,7 @@ extendEnvironment((hre) => {
     const cairoFile = await (hre.artifacts as unknown as Artifacts).getArtifactPath(name);
     const starknetContractFactory = new StarkNetContractFactory(
       artifact,
-      callClassHashScript(cairoFile),
+      runStarkNetClassHash(cairoFile),
       signerOrOptions,
       artifact.abi,
     );

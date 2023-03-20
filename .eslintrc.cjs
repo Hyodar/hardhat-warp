@@ -12,6 +12,7 @@ module.exports = {
     '@typescript-eslint/ban-ts-comment': ['error', 'allow-with-description'],
     '@typescript-eslint/no-floating-promises': 'error',
     'no-console': ['error', { allow: ['warn', 'error'] }],
+    quotes: ['error', 'single', { allowTemplateLiterals: true }],
   },
   root: true,
 };

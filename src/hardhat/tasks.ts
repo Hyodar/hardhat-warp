@@ -290,15 +290,13 @@ subtask(TASK_TYPECHAIN_GENERATE_TYPES).setAction(
     // }
 
     // RUN TYPECHAIN TASK
-    // @ts-ignore funky types cause we're not using normal imports here
     const typechainCfg = config.typechain;
+    // @ts-expect-error
+    const fullRebuild = typechainCfg.fullRebuild;
+
     // NOTE: We replace the fullRequild from the taskArgsStore with our own in
     // the hardhat config.
-    if (
-      !typechainCfg.fullRebuild &&
-      artifactPaths.length === 0 &&
-      !typechainCfg.externalArtifacts
-    ) {
+    if (!fullRebuild && artifactPaths.length === 0 && !typechainCfg.externalArtifacts) {
       if (!quiet) {
         // eslint-disable-next-line no-console
         console.log('No need to generate any newer typings.');
@@ -311,9 +309,7 @@ subtask(TASK_TYPECHAIN_GENERATE_TYPES).setAction(
     // @todo: probably targets should specify somehow if then support incremental generation this won't work with custom targets
     // NOTE: We replace the fullRequild from the taskArgsStore with our own in
     // the hardhat config.
-    const needsFullRebuild =
-      /*typechain.taskArgsStore.fullRebuild || */ typechainCfg.target !== 'ethers-v5' ||
-      typechainCfg.fullRebuild;
+    const needsFullRebuild = typechainCfg.target !== 'ethers-v5' || fullRebuild;
     if (!quiet) {
       // eslint-disable-next-line no-console
       console.log(

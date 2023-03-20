@@ -78,6 +78,7 @@ extendEnvironment((hre) => {
   hre.ethers.constants = {
     //@ts-ignore
     ...hre.ethers.constants,
+    //@ts-expect-error
     AddressZero: '0x0000000000000000000000000000000000000000000000000000000000000000',
   };
 
